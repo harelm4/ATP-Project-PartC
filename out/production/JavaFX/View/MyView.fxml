@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import View.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
+   <top>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu fx:id="file_button" mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem fx:id="newButton" mnemonicParsing="false" onAction="#newButtonClick" text="New" />
+                        <MenuItem fx:id="saveButton" mnemonicParsing="false" onAction="#saveButtonClick" text="Save" />
+                        <MenuItem fx:id="loadButton" mnemonicParsing="false" onAction="#loadButtonClick" text="Load" />
+                  </items>
+                </Menu>
+                <Menu fx:id="optionsButton" mnemonicParsing="false" text="Options">
+                  <items>
+                    <MenuItem fx:id="propButton" mnemonicParsing="false" onAction="#propOnClick" text="Properties" />
+                  </items>
+                </Menu>
+                  <Menu fx:id="helpButton" mnemonicParsing="false" onAction="#helpButtonClick" text="Help" />
+                  <Menu fx:id="aboutButton" mnemonicParsing="false" onAction="#aboutButtonClick" text="About" />
+                  <Menu fx:id="exitButton" mnemonicParsing="false" onAction="#exitBottonClick" text="Exit" />
+              </menus>
+            </MenuBar>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <Pane BorderPane.alignment="CENTER">
+       <children>
+           <MazeDisplayer fx:id="mazeDisplayer" height="800.0" width="800.0" />
+       </children>
+          <padding>
+              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+          </padding>
+      </Pane>
+   </center>
+</BorderPane>
