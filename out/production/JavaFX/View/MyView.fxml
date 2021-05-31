@@ -6,40 +6,57 @@
 <?import javafx.scene.layout.*?>
 <?import View.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#mouseClicked" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
    <top>
-      <VBox BorderPane.alignment="CENTER">
-         <children>
-            <MenuBar>
-              <menus>
-                <Menu fx:id="file_button" mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem fx:id="newButton" mnemonicParsing="false" onAction="#newButtonClick" text="New" />
-                        <MenuItem fx:id="saveButton" mnemonicParsing="false" onAction="#saveButtonClick" text="Save" />
-                        <MenuItem fx:id="loadButton" mnemonicParsing="false" onAction="#loadButtonClick" text="Load" />
-                  </items>
-                </Menu>
-                <Menu fx:id="optionsButton" mnemonicParsing="false" text="Options">
-                  <items>
-                    <MenuItem fx:id="propButton" mnemonicParsing="false" onAction="#propOnClick" text="Properties" />
-                  </items>
-                </Menu>
-                  <Menu fx:id="helpButton" mnemonicParsing="false" onAction="#helpButtonClick" text="Help" />
-                  <Menu fx:id="aboutButton" mnemonicParsing="false" onAction="#aboutButtonClick" text="About" />
-                  <Menu fx:id="exitButton" mnemonicParsing="false" onAction="#exitBottonClick" text="Exit" />
-              </menus>
-            </MenuBar>
-         </children>
-      </VBox>
+      <BorderPane prefHeight="27.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <center>
+            <AnchorPane prefHeight="100.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox fx:id="menuBox">
+                     <children>
+                        <MenuBar prefHeight="25.0">
+                          <menus>
+                            <Menu fx:id="file_button" mnemonicParsing="false" text="File">
+                              <items>
+                                <MenuItem fx:id="newButton" mnemonicParsing="false" onAction="#newButtonClick" text="New" />
+                                    <MenuItem fx:id="saveButton" mnemonicParsing="false" onAction="#saveButtonClick" text="Save" />
+                                    <MenuItem fx:id="loadButton" mnemonicParsing="false" onAction="#loadButtonClick" text="Load" />
+                              </items>
+                            </Menu>
+                            <Menu fx:id="optionsButton" mnemonicParsing="false" text="Options">
+                              <items>
+                                <MenuItem fx:id="propButton" mnemonicParsing="false" onAction="#propOnClick" text="Properties" />
+                              </items>
+                            </Menu>
+                          </menus>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </MenuBar>
+                     </children>
+                     <BorderPane.margin>
+                        <Insets right="200.0" />
+                     </BorderPane.margin>
+                  </VBox>
+                  <Button fx:id="exitButton" layoutX="200.0" mnemonicParsing="false" onAction="#exitBottonClick" text="Exit" />
+                  <Button fx:id="helpButton" layoutX="159.0" mnemonicParsing="false" onAction="#helpButtonClick" text="Help" />
+                  <Button fx:id="aboutButton" layoutX="110.0" mnemonicParsing="false" onAction="#aboutButtonClick" text="About" />
+                  <Button fx:id="solButton" layoutX="506.0" layoutY="1.0" mnemonicParsing="false" onAction="#showSolution" text="Show Solution" />
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </AnchorPane>
+
+         </center>
+      </BorderPane>
    </top>
    <center>
-      <Pane BorderPane.alignment="CENTER">
-       <children>
-           <MazeDisplayer fx:id="mazeDisplayer" height="800.0" width="800.0" />
-       </children>
-          <padding>
-              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-          </padding>
+      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" >
+          <children>
+                            <MazeDisplayer fx:id="mazeDisplayer" onKeyPressed="#keyPressed" height="400.0" width="400.0" />
+          </children>
       </Pane>
    </center>
+
 </BorderPane>
