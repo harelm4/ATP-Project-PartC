@@ -31,6 +31,10 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
     double cellWidth;
     GraphicsContext graphicsContext;
 
+    public MazeDisplayer(){
+        this.widthProperty().addListener(evt -> Display());
+        this.heightProperty().addListener(evt -> Display());
+    }
 
     public void displayMaze(Maze maze) {
         this.maze = maze;
@@ -114,6 +118,7 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
     @Override
     public void Display() {
         if (maze != null) {
+            System.out.println("display changed\n-----");
             double canvasHeight = getHeight();
             double canvasWidth = getWidth();
             int rowSize = maze.getRowSize();
@@ -131,9 +136,7 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
 
 
         }
-        else{
-            System.out.println("display maze is null");
-        }
+
 
 
     }
@@ -274,5 +277,20 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
             }
         }
         return new Position(Integer.valueOf(str1),Integer.valueOf(str2));
+    }
+
+    @Override
+    public boolean isResizable() {
+        return true;
+    }
+
+    @Override
+    public double prefWidth(double v) {
+        return this.getWidth();
+    }
+
+    @Override
+    public double prefHeight(double v) {
+        return this.getHeight();
     }
 }

@@ -27,6 +27,7 @@ import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -42,7 +43,7 @@ public class MyViewController implements IView, Observer, Initializable {
      IMazeGenerator mazeGenerator;
      int rowSize;
      int colSize;
-    public VBox menuBox;
+    public MenuBar menuBox;
     public Button exitButton;
     FileChooser fileChooser=new FileChooser();
     Maze maze;
@@ -53,18 +54,19 @@ public class MyViewController implements IView, Observer, Initializable {
      Solution sol;
     private int playerRow;
     private int playerCol;
-    public AnchorPane mainPane;
+    public AnchorPane mPane;
     public AnchorPane mazePane;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        mazePane.prefHeightProperty().bind(mainPane.prefHeightProperty());
-        mazePane.prefWidthProperty().bind(mainPane.prefWidthProperty());
-        mazeDisplayer.heightProperty().bind(mainPane.prefHeightProperty());
-        mazeDisplayer.widthProperty().bind(mainPane.prefWidthProperty());
+        mazeDisplayer.heightProperty().bind(mPane.heightProperty());
+        mazeDisplayer.widthProperty().bind(mPane.widthProperty());
+
+
     }
 
     public void newButtonClick(ActionEvent actionEvent) {
+
         if (!isPropAlreadySet){
             Alert a = new Alert(Alert.AlertType.WARNING);
             a.setTitle("Properties alert");
