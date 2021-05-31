@@ -58,25 +58,25 @@ public class MyViewController implements IView, Observer, Initializable {
     public AnchorPane mPane;
     public AnchorPane mazePane;
     public MenuItem newButton;
+    public MenuItem saveButton;
+    public MenuItem loadButton;
+    public Button solButton;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         mazeDisplayer.heightProperty().bind(mPane.heightProperty());
         mazeDisplayer.widthProperty().bind(mPane.widthProperty());
-//        newButton.setDisable(true);
-
+        newButton.setDisable(true);
+        saveButton.setDisable(true);
+        loadButton.setDisable(true);
+        solButton.setDisable(true);
 
     }
 
     public void newButtonClick(ActionEvent actionEvent) {
 
-        if (!isPropAlreadySet){
-            Alert a = new Alert(Alert.AlertType.WARNING);
-            a.setTitle("Properties alert");
-            a.setContentText("maze properties has'nt been set yet\ngo to options->properties to set maze properties");
-            a.show();
-            return;
-        }
+
         viewModel.generateMaze();
         setMaze();
         //unlock keys
@@ -259,7 +259,11 @@ public class MyViewController implements IView, Observer, Initializable {
         Configurations.getInstance().setThreadPoolSize(String.valueOf(numberOfClientsInt));
         Configurations.getInstance().setMazeGeneratingAlgorithm(generatorType);
         Configurations.getInstance().setMazeSearchingAlgorithm(algorithmType);
-        isPropAlreadySet=true;
+        newButton.setDisable(false);
+        saveButton.setDisable(false);
+        loadButton.setDisable(false);
+        solButton.setDisable(false);
+
     }
 
 
