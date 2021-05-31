@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -22,8 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
@@ -33,12 +33,11 @@ import javafx.stage.Window;
 
 import java.io.*;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Optional;
+import java.net.URL;
+import java.util.*;
 
-public class MyViewController implements IView, Observer {
+public class MyViewController implements IView, Observer, Initializable {
+
      public MazeDisplayer mazeDisplayer;
      IMazeGenerator mazeGenerator;
      int rowSize;
@@ -54,7 +53,16 @@ public class MyViewController implements IView, Observer {
      Solution sol;
     private int playerRow;
     private int playerCol;
+    public AnchorPane mainPane;
+    public AnchorPane mazePane;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        mazePane.prefHeightProperty().bind(mainPane.prefHeightProperty());
+        mazePane.prefWidthProperty().bind(mainPane.prefWidthProperty());
+        mazeDisplayer.heightProperty().bind(mainPane.prefHeightProperty());
+        mazeDisplayer.widthProperty().bind(mainPane.prefWidthProperty());
+    }
 
     public void newButtonClick(ActionEvent actionEvent) {
         if (!isPropAlreadySet){
@@ -360,4 +368,6 @@ public class MyViewController implements IView, Observer {
     public void setViewModel(ViewModel vm){
         viewModel=vm;
     }
+
+
 }

@@ -14,7 +14,7 @@ public class main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("View/MyView.fxml"));
         Parent root = fxmlLoader.load();
         primaryStage.setTitle("Maze");
-        primaryStage.setScene(new Scene(root, 700, 500));
+        primaryStage.setScene(new Scene(root, 600, 600));
         primaryStage.show();
 
         IModel model = new MyModel();
@@ -22,6 +22,7 @@ public class main extends Application {
         MyViewController controller = fxmlLoader.getController();
         controller.setViewModel(viewModel);
         viewModel.addObserver(controller);
+
     }
 
     public static void main(String[] args) {
