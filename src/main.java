@@ -5,6 +5,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class main extends Application {
@@ -16,6 +18,8 @@ public class main extends Application {
         primaryStage.setTitle("Maze");
         primaryStage.setScene(new Scene(root, 600, 600));
         primaryStage.show();
+        primaryStage.setResizable(true);
+
 
         IModel model = new MyModel();
         ViewModel viewModel = new ViewModel(model);
