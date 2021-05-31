@@ -23,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -372,4 +373,31 @@ public class MyViewController implements IView, Observer, Initializable {
     }
 
 
+    public void Zoom(ScrollEvent scrollEvent) {
+        double m_zoom;
+        if (scrollEvent.isControlDown()) {
+            m_zoom = 1.5;
+            if (scrollEvent.getDeltaY() > 0) {
+                m_zoom = 1.1*m_zoom;
+
+            } else if (scrollEvent.getDeltaY() < 0) {
+                m_zoom = 1.1/ m_zoom;
+            }
+            if (mazeDisplayer.getScaleX() * m_zoom <0.9)
+            {
+                mazeDisplayer.setScaleX(1);
+                mazeDisplayer.setScaleY(1);
+                mazeDisplayer.setTranslateX(0);
+                mazeDisplayer.setTranslateY(0);
+            }
+            else
+            {
+                mazeDisplayer.zoom(m_zoom, scrollEvent.getSceneX(), scrollEvent.getSceneY());
+                mazeDisplayer.setScaleX(mazeDisplayer.getScaleX() * m_zoom);
+                mazeDisplayer.setScaleY(mazeDisplayer.getScaleY() * m_zoom);
+            }
+            scrollEvent.consume();     // event handling from the root
+            mazeDisplayer.requestFocus();
+        }
+    }
 }

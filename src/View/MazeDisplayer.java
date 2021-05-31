@@ -5,13 +5,20 @@ import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.MyMazeGenerator;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 
 import java.io.FileInputStream;
@@ -139,6 +146,8 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
 
 
 
+
+
     }
 
     private void DrawPlayer(GraphicsContext graphicsContext, double cellHeight, double cellWidth) {
@@ -192,6 +201,29 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
             }
         }
     }
+    public void zoom(double factor, double x, double y) {
+        // determine scale
+        Timeline timeline=new Timeline();
+        double oldScale = getScaleX();
+        double scale = oldScale * factor;
+        double f = (scale / oldScale) - 1;
+        // determine offset that we will have to move the node
+        Bounds bounds = localToScene(getBoundsInLocal());
+        double dx = (x - (bounds.getWidth() / 2 + bounds.getMinX()));
+        double dy = (y - (bounds.getHeight() / 2 + bounds.getMinY()));
+        // timeline that scales and moves the node
+
+        timeline.getKeyFrames().clear();
+        timeline.getKeyFrames().addAll(
+                new KeyFrame(Duration.millis(200), new KeyValue(translateXProperty(), getTranslateX() - f * dx)),
+                new KeyFrame(Duration.millis(200), new KeyValue(translateYProperty(), getTranslateY() - f * dy)),
+                new KeyFrame(Duration.millis(200), new KeyValue(scaleXProperty(), scale)),
+                new KeyFrame(Duration.millis(200), new KeyValue(scaleYProperty(), scale))
+        );
+        timeline.play();
+    }
+
+
 
     private void drawStartGoal(GraphicsContext graphicsContext, double cellHeight, double cellWidth, int rows, int cols) {
         double x = maze.getStartPosition().getColumnIndex() * cellWidth;

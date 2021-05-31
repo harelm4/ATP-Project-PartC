@@ -41,7 +41,7 @@
       </AnchorPane>
        <AnchorPane fx:id="mazePane" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
            <children>
-               <MazeDisplayer fx:id="mazeDisplayer"  onKeyPressed="#keyPressed"
+               <MazeDisplayer fx:id="mazeDisplayer"  onKeyPressed="#keyPressed" onScroll="#Zoom"
                               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
            </children>
        </AnchorPane>
