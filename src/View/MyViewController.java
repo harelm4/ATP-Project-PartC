@@ -61,6 +61,10 @@ public class MyViewController implements IView, Observer, Initializable {
     public MenuItem saveButton;
     public MenuItem loadButton;
     public Button solButton;
+c    boolean wantMute=true;
+    public Button muteButton;
+    public Button vUpButton;
+    public Button vDownButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -71,6 +75,9 @@ public class MyViewController implements IView, Observer, Initializable {
         saveButton.setDisable(true);
         loadButton.setDisable(true);
         solButton.setDisable(true);
+        vUpButton.setDisable(true);
+        vDownButton.setDisable(true);
+        muteButton.setDisable(true);
 
     }
 
@@ -91,6 +98,9 @@ public class MyViewController implements IView, Observer, Initializable {
         mediaPlayer.play();
         //focus on mazeDisplay
         mazeDisplayer.requestFocus();
+        vUpButton.setDisable(false);
+        vDownButton.setDisable(false);
+        muteButton.setDisable(false);
 
 
     }
@@ -167,6 +177,7 @@ public class MyViewController implements IView, Observer, Initializable {
     }
 
    public void propOnClick(ActionEvent actionEvent) {
+
     // Create the custom dialog.
     Dialog<ButtonType> dialog = new Dialog<ButtonType>();
 
@@ -214,6 +225,13 @@ public class MyViewController implements IView, Observer, Initializable {
     grid.add(rowSize, 1, 1);
     grid.add(new Label("column Size:"), 0, 2);
     grid.add(colSize, 1, 2);
+
+    grid.add(new Label("current value:"+Configurations.getInstance().getThreadPoolSize()), 2, 0);
+       grid.add(new Label("current value: "+this.rowSize), 2, 1);
+       grid.add(new Label("current value: "+this.colSize), 2, 2);
+       grid.add(new Label("current value: "+Configurations.getInstance().getMazeGeneratingAlgorithm()), 2, 3);
+       grid.add(new Label("current value: "+Configurations.getInstance().getMazeSearchingAlgorithm()), 2, 4);
+
 
     ObservableList<String> generatorOptions = FXCollections.observableArrayList(generatorChoice);
     ComboBox<String> generatorComboBox = new ComboBox<String>(generatorOptions);
@@ -273,7 +291,7 @@ public class MyViewController implements IView, Observer, Initializable {
    }
    private void setMaze(){
        mazeDisplayer.setPlayerImage("./resources/player_front.jpg");
-       mazeDisplayer.setWallImage("./resources/wall.jpg");
+       mazeDisplayer.setWallImage("./resources/wall.png");
        mazeDisplayer.setPlayerPosition(playerRow,playerCol);
        mazeDisplayer.displayMaze(maze);
 
@@ -315,9 +333,7 @@ public class MyViewController implements IView, Observer, Initializable {
     public void mouseClicked(MouseEvent mouseEvent) {
 
         mazeDisplayer.requestFocus();
-        if(mouseEvent.isDragDetect()){
-//todo
-        }
+
     }
 
 
@@ -405,5 +421,31 @@ public class MyViewController implements IView, Observer, Initializable {
             scrollEvent.consume();     // event handling from the root
             mazeDisplayer.requestFocus();
         }
+    }
+
+    public void vUpClick(ActionEvent actionEvent) {
+        mediaPlayer.volumeProperty().set(mediaPlayer.getVolume()+0.1);
+        mazeDisplayer.requestFocus();
+    }
+
+    public void muteButton(ActionEvent actionEvent) {
+        if(wantMute){
+            mediaPlayer.setMute(true);
+            wantMute=false;
+            muteButton.setText("unMute");
+        }
+        else {
+            mediaPlayer.setMute(false);
+            wantMute=true;
+            muteButton.setText("Mute");
+
+        }
+        mazeDisplayer.requestFocus();
+
+    }
+
+    public void vDownClick(ActionEvent actionEvent) {
+        mediaPlayer.volumeProperty().set(mediaPlayer.getVolume()-0.1);
+        mazeDisplayer.requestFocus();
     }
 }

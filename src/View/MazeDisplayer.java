@@ -161,15 +161,19 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
             graphicsContext = getGraphicsContext2D();
             //clear the canvas:
             graphicsContext.clearRect(0, 0, canvasWidth, canvasHeight);
+            long t = System.currentTimeMillis();
+
             drawStartGoal(graphicsContext, cellHeight, cellWidth, rowSize, colsSize);
+
+
             DrawWalls(graphicsContext, cellHeight, cellWidth, rowSize, colsSize);
+
+
             DrawPlayer(graphicsContext, cellHeight, cellWidth);
 
 
+
         }
-
-
-
 
 
     }
