@@ -57,11 +57,13 @@ public class MyViewController implements IView, Observer, Initializable {
     private int playerCol;
     public AnchorPane mPane;
     public AnchorPane mazePane;
+    public MenuItem newButton;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         mazeDisplayer.heightProperty().bind(mPane.heightProperty());
         mazeDisplayer.widthProperty().bind(mPane.widthProperty());
+//        newButton.setDisable(true);
 
 
     }

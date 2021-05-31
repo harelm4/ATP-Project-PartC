@@ -10,6 +10,8 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -39,8 +41,30 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
     GraphicsContext graphicsContext;
 
     public MazeDisplayer(){
-        this.widthProperty().addListener(evt -> Display());
-        this.heightProperty().addListener(evt -> Display());
+        this.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                if(!isWon){
+                    Display();
+                }
+                else{
+                    drawWin();
+                }
+            }
+        }
+
+                );
+        this.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                if(!isWon){
+                    Display();
+                }
+                else{
+                    drawWin();
+                }
+            }
+        });
     }
 
     public void displayMaze(Maze maze) {
@@ -88,6 +112,7 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
         Display();
 
         if (maze != null && playerRow == maze.getGoalPosition().getRowIndex() && playerCol == maze.getGoalPosition().getColumnIndex()) {
+            isWon=true;
             drawWin();
 
         }
@@ -125,8 +150,7 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
     @Override
     public void Display() {
         if (maze != null) {
-            System.out.println("display changed\n-----");
-            double canvasHeight = getHeight();
+            double canvasHeight = getHeight()-20;
             double canvasWidth = getWidth();
             int rowSize = maze.getRowSize();
             int colsSize = maze.getColSize();
