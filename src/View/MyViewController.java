@@ -61,7 +61,7 @@ public class MyViewController implements IView, Observer, Initializable {
     public MenuItem saveButton;
     public MenuItem loadButton;
     public Button solButton;
-c    boolean wantMute=true;
+    boolean wantMute=true;
     public Button muteButton;
     public Button vUpButton;
     public Button vDownButton;
