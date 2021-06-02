@@ -22,5 +22,9 @@ public interface IModel {
     public int getColSize();
 
 
+    public void refreshThreadPoolSize();
 
+
+
+    public void stop();
 }

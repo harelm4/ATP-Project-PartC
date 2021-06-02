@@ -41,14 +41,12 @@ import java.util.*;
 public class MyViewController implements IView, Observer, Initializable {
 
      public MazeDisplayer mazeDisplayer;
-     IMazeGenerator mazeGenerator;
      int rowSize;
      int colSize;
     public MenuBar menuBox;
     public Button exitButton;
     FileChooser fileChooser=new FileChooser();
     Maze maze;
-    boolean isPropAlreadySet=false;
     MediaPlayer mediaPlayer;
     boolean isEnded=false;
      ViewModel viewModel;
@@ -171,7 +169,8 @@ public class MyViewController implements IView, Observer, Initializable {
         a.showAndWait();
     }
 
-    public void exitBottonClick(ActionEvent actionEvent) {
+    public void exitButtonClick(ActionEvent actionEvent) {
+        viewModel.stop();
         Stage stage = (Stage) menuBox.getScene().getWindow();
         stage.close();
     }
@@ -275,6 +274,7 @@ public class MyViewController implements IView, Observer, Initializable {
 
 
         Configurations.getInstance().setThreadPoolSize(String.valueOf(numberOfClientsInt));
+
         Configurations.getInstance().setMazeGeneratingAlgorithm(generatorType);
         Configurations.getInstance().setMazeSearchingAlgorithm(algorithmType);
         newButton.setDisable(false);
@@ -282,6 +282,7 @@ public class MyViewController implements IView, Observer, Initializable {
         loadButton.setDisable(false);
         solButton.setDisable(false);
 
+        viewModel.refreshThreadPoolSize();
     }
 
 

@@ -178,4 +178,11 @@ public class ViewModel extends Observable implements Observer {
     }
 
 
+    public void refreshThreadPoolSize() {
+        model.refreshThreadPoolSize();
+    }
+
+    public void stop() {
+        model.stop();
+    }
 }

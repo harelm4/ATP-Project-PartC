@@ -10,7 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class main extends Application {
-
+    IModel model;
     @Override
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("View/MyView.fxml"));
@@ -21,12 +21,17 @@ public class main extends Application {
         primaryStage.setResizable(true);
 
 
-        IModel model = new MyModel();
+        model = new MyModel();
         ViewModel viewModel = new ViewModel(model);
         MyViewController controller = fxmlLoader.getController();
         controller.setViewModel(viewModel);
         viewModel.addObserver(controller);
 
+    }
+
+    @Override
+    public void stop() throws Exception {
+        model.stop();
     }
 
     public static void main(String[] args) {

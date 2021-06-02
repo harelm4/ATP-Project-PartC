@@ -1,11 +1,18 @@
 package Model;
 
+import Client.*;
+import IO.MyDecompressorInputStream;
 import Server.Configurations;
+import Server.*;
 import algorithms.mazeGenerators.*;
 import algorithms.search.*;
 import javafx.scene.media.Media;
 
 
+import java.io.*;
+import java.net.InetAddress;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -18,25 +25,65 @@ public class MyModel extends Observable implements IModel {
     ISearchingAlgorithm solvingAlgorithm;
     private int colSize;
     private int rowSize;
+    private Server generateServer;
+    private Server solvingServer;
+
+    public MyModel(){
+        generateServer=new Server(4000,1000,new ServerStrategyGenerateMaze());
+        solvingServer=new Server(4001,1000,new ServerStrategySolveSearchProblem());
+        generateServer.start();
+        solvingServer.start();
+    }
+    public void refreshThreadPoolSize(){
+        generateServer.stop();
+        solvingServer.stop();
+
+        generateServer=new Server(4000,1000,new ServerStrategyGenerateMaze());
+        solvingServer=new Server(4001,1000,new ServerStrategySolveSearchProblem());
+
+//        generateServer.start();
+        solvingServer.start();
 
 
 
+    }
+    public void stop(){
+        generateServer.stop();
+        solvingServer.stop();
+        System.out.println("stopped");
+    }
     @Override
     public void generateMaze() {
-        String gen= Configurations.getInstance().getMazeGeneratingAlgorithm();
-        if(gen.equals("MyMazeGenerator")){
-            mazeGenerator= new MyMazeGenerator();
-        }
-        else if(gen.equals("SimpleMazeGenerator")){
 
-            mazeGenerator= new SimpleMazeGenerator();
-        }
-        else {
-            mazeGenerator = new EmptyMazeGenerator();
+        try {
+            new Client(InetAddress.getLocalHost(), 4000, new IClientStrategy() {
+                @Override
+                public void clientStrategy(InputStream inFromServer, OutputStream outToServer) {
+                    try {
+                        ObjectOutputStream toServer = new ObjectOutputStream(outToServer);
+                        int[] mazeDimensions = new int[]{rowSize, colSize};
+                        toServer.writeObject(mazeDimensions);
+                        toServer.flush();
+                        ObjectInputStream fromServer = new ObjectInputStream(inFromServer);
+                        byte[] compressedMaze = (byte[]) fromServer.readObject(); //read generated maze (compressed with MyCompressor) from server
+                        InputStream is = new MyDecompressorInputStream(new ByteArrayInputStream(compressedMaze));
+                        byte[] decompressedMaze = new byte[rowSize*colSize+rowSize]; //allocating byte[] for the decompressed maze -
+                        is.read(decompressedMaze); //Fill decompressedMaze with bytes
+
+                        maze = new Maze(decompressedMaze);
+                    }catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+            ).communicateWithServer();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
         }
 
-
-        maze = mazeGenerator.generate(rowSize,colSize);
         setChanged();
         notifyObservers();
         playerCol=maze.getStartPosition().getColumnIndex();
@@ -126,16 +173,29 @@ public class MyModel extends Observable implements IModel {
 
     @Override
     public void solveMaze() {
+        try {
+            new Client(InetAddress.getLocalHost(), 4001, new IClientStrategy() {
+                @Override
+                public void clientStrategy(InputStream inFromServer, OutputStream outToServer) {
+                    try {
+                        ObjectOutputStream toServer = new ObjectOutputStream(outToServer);
+                        toServer.flush();
+                        MyMazeGenerator mg = new MyMazeGenerator();
+                        toServer.writeObject(maze); //send maze to server
+                        toServer.flush();
+                        ObjectInputStream fromServer = new ObjectInputStream(inFromServer);
+                        sol= (Solution) fromServer.readObject(); //read generated maze (compressed with MyCompressor) from server
 
-        String conf = Configurations.getInstance().getMazeSearchingAlgorithm();
-        if (conf.equals("DFS")) {
-            solvingAlgorithm = new DepthFirstSearch();
-        } else if (conf.equals("BFS")) {
-            solvingAlgorithm = new BestFirstSearch();
-        } else {
-            solvingAlgorithm = new BestFirstSearch();
+                    } catch (Exception e) {
+
+                    }
+                }
+            }).communicateWithServer();
+        } catch (Exception e) {
+
+
         }
-        sol = solvingAlgorithm.solve(new SearchableMaze(maze));
+
         setChanged();
         notifyObservers();
     }
