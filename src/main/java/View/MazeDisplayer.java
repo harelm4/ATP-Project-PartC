@@ -303,6 +303,9 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
         graphicsContext.setFill(Color.CORAL);
         for (int i = 0; i < maze.getRowSize(); i++) {
             for (int j = 0; j < maze.getColSize(); j++) {
+                if(i==playerRow && j==playerCol){
+                    continue;
+                }
                 double x = j * cellWidth;
                 double y = i * cellHeight;
                 Position curPos = new Position(i, j);
