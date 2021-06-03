@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
@@ -57,6 +58,8 @@ public class MyViewController implements IView, Observer, Initializable {
     public Button muteButton;
     public Button vUpButton;
     public Button vDownButton;
+    public Boolean isCellOfPlayer=false;
+
     Logger logger = LogManager.getLogger(Logger.class);
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -298,7 +301,7 @@ public class MyViewController implements IView, Observer, Initializable {
    }
    private void setMaze(){
        mazeDisplayer.setPlayerImage("./resources/player_front.jpg");
-       mazeDisplayer.setWallImage("./resources/wall.png");
+       mazeDisplayer.setWallImage("./resources/wall.jpg");
        mazeDisplayer.setPlayerPosition(playerRow,playerCol);
        mazeDisplayer.displayMaze(maze);
 
@@ -464,4 +467,26 @@ public class MyViewController implements IView, Observer, Initializable {
         mediaPlayer.volumeProperty().set(mediaPlayer.getVolume()-0.1);
         mazeDisplayer.requestFocus();
     }
+
+    public void MoveWithDrag(MouseEvent mouseEvent) {
+
+        int mouseX = (int)(mouseEvent.getSceneX()/mazeDisplayer.cellWidth);
+        int mouseY = (int)((mouseEvent.getSceneY()-30)/mazeDisplayer.cellHeight);
+
+        if(playerCol==mouseX && playerRow==mouseY){
+            isCellOfPlayer=true;
+        }
+        if(isCellOfPlayer){
+            viewModel.movePlayerDrag(mouseX,mouseY);
+        }
+        System.out.println("("+ playerCol+","+playerRow +")");
+        System.out.println("mouse clic----k("+ mouseX+","+mouseY +")");
+
+    }
+
+    public void realisedMouse(MouseEvent mouseEvent) {
+        isCellOfPlayer=false;
+    }
+
+
 }

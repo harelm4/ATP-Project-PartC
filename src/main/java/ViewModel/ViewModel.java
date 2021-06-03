@@ -185,4 +185,39 @@ public class ViewModel extends Observable implements Observer {
     public void stop() {
         model.stop();
     }
+
+    public void movePlayerDrag(int mouseX,int mouseY){
+
+            String direction="";
+            if(mouseX>playerCol && mouseY==playerRow){
+                direction="right";
+            }
+            if(mouseX<playerCol && mouseY==playerRow){
+                direction="left";
+            }
+            if(mouseX==playerCol && mouseY<playerRow){
+                direction="up";
+            }
+            if(mouseX==playerCol && mouseY>playerRow){
+                direction="down";
+            }
+            if(mouseX>playerCol && mouseY>playerRow){
+                direction="right-down";
+            }
+            if(mouseX>playerCol && mouseY<playerRow){
+                direction="right-up";
+            }
+            if(mouseX<playerCol && mouseY>playerRow){
+                direction="left-down";
+            }
+            if(mouseX<playerCol && mouseY<playerRow){
+                direction="left-up";
+            }
+            model.updateCharacterLocation(direction);
+            setChanged();
+            notifyObservers();
+
+
+    }
+
 }
