@@ -92,7 +92,7 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
     public void setPlayerPosition(int row, int col) {
         //up
         if (row < playerRow) {
-            setPlayerImage("./resources/player_up.png");
+            setPlayerImage("./resources/player_up.jpg");
         }
         //down
         if (row > playerRow) {
@@ -100,11 +100,11 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
         }
         //left
         if (col < playerCol) {
-            setPlayerImage("./resources/player_left.png");
+            setPlayerImage("./resources/player_left.jpg");
         }
         //right
         if (col > playerCol) {
-            setPlayerImage("./resources/player_right.png");
+            setPlayerImage("./resources/player_right.jpg");
         }
         playerRow = row;
         playerCol = col;
@@ -219,11 +219,11 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
                         graphicsContext.drawImage(wallImage, x, y, cellWidth, cellHeight);
                 } else if (!(maze.getStartPosition().equals(new Position(i, j))) && !maze.getGoalPosition().equals(new Position(i, j))) {
                     Image c = null;
-                    try {
-                        c = new Image(new FileInputStream("./resources/road.png"));
-                    } catch (FileNotFoundException e) {
-                        System.out.println("no road image");
-                    }
+//                    try {
+//                        c = new Image(new FileInputStream("./resources/road2.jpg"));
+//                    } catch (FileNotFoundException e) {
+//                        System.out.println("no road image");
+//                    }
                     graphicsContext.drawImage(c, x, y, cellWidth, cellHeight);
                 }
             }
@@ -261,7 +261,7 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
         //start
         Image startFlag = null;
         try {
-            startFlag = new Image(new FileInputStream("./resources/start_flag.png"));
+            startFlag = new Image(new FileInputStream("./resources/start_flag.jpg"));
         } catch (FileNotFoundException e) {
             System.out.println("There is no start image file");
         }
