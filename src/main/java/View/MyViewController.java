@@ -118,9 +118,12 @@ public class MyViewController implements IView, Observer, Initializable {
         //getting the file and saving it
         File f = fileChooser.showSaveDialog(stage);
         try {
-            FileOutputStream fos = new FileOutputStream(f);
-            ObjectOutputStream o = new ObjectOutputStream(fos);
-            o.writeObject(maze);
+            if(f!=null){
+                FileOutputStream fos = new FileOutputStream(f);
+                ObjectOutputStream o = new ObjectOutputStream(fos);
+                o.writeObject(maze);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -140,10 +143,13 @@ public class MyViewController implements IView, Observer, Initializable {
 
         FileInputStream fi = null;
         try {
-            fi = new FileInputStream(f);
-            ObjectInputStream oi = new ObjectInputStream(fi);
-            maze = (Maze)oi.readObject();
-            viewModel.setMaze(maze);
+            if(f!=null){
+                fi = new FileInputStream(f);
+                ObjectInputStream oi = new ObjectInputStream(fi);
+                maze = (Maze)oi.readObject();
+                viewModel.setMaze(maze);
+            }
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
