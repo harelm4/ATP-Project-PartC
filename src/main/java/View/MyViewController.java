@@ -80,6 +80,8 @@ public class MyViewController implements IView, Observer, Initializable {
         setMaze();
         //unlock keys
         isEnded=false;
+        saveButton.setDisable(false);
+        loadButton.setDisable(false);
         //music set
         String uriString = new File("./resources/music.mp3").toURI().toString();
         if(mediaPlayer!=null){
@@ -94,6 +96,7 @@ public class MyViewController implements IView, Observer, Initializable {
 
         //focus on mazeDisplay
         mazeDisplayer.requestFocus();
+
         vUpButton.setDisable(false);
         vDownButton.setDisable(false);
         muteButton.setDisable(false);
@@ -276,8 +279,6 @@ public class MyViewController implements IView, Observer, Initializable {
         Configurations.getInstance().setMazeGeneratingAlgorithm(generatorType);
         Configurations.getInstance().setMazeSearchingAlgorithm(algorithmType);
         newButton.setDisable(false);
-        saveButton.setDisable(false);
-        loadButton.setDisable(false);
         solButton.setDisable(false);
 
         viewModel.refreshThreadPoolSize();
