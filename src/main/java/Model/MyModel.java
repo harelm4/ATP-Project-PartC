@@ -205,6 +205,13 @@ public class MyModel extends Observable implements IModel {
         this.maze=maze;
         setChanged();
         notifyObservers();
+        this.playerCol=maze.getStartPosition().getColumnIndex();
+
+        setChanged();
+        notifyObservers();
+        this.playerRow=maze.getStartPosition().getRowIndex();
+        setChanged();
+        notifyObservers();
     }
 
     @Override

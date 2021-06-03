@@ -65,7 +65,6 @@ public class MyViewController implements IView, Observer, Initializable {
         mazeDisplayer.widthProperty().bind(mPane.widthProperty());
         newButton.setDisable(true);
         saveButton.setDisable(true);
-        loadButton.setDisable(true);
         solButton.setDisable(true);
         vUpButton.setDisable(true);
         vDownButton.setDisable(true);
@@ -81,7 +80,6 @@ public class MyViewController implements IView, Observer, Initializable {
         //unlock keys
         isEnded=false;
         saveButton.setDisable(false);
-        loadButton.setDisable(false);
         //music set
         String uriString = new File("./resources/music.mp3").toURI().toString();
         if(mediaPlayer!=null){
@@ -148,6 +146,9 @@ public class MyViewController implements IView, Observer, Initializable {
                 ObjectInputStream oi = new ObjectInputStream(fi);
                 maze = (Maze)oi.readObject();
                 viewModel.setMaze(maze);
+                viewModel.setColSize(maze.getColSize());
+                viewModel.setRowSize(maze.getRowSize());
+
             }
 
         } catch (FileNotFoundException e) {
@@ -329,7 +330,10 @@ public class MyViewController implements IView, Observer, Initializable {
                 mediaPlayer.pause();
                 String uriString = new File("./resources/winMusic.mp3").toURI().toString();
                 mediaPlayer = new MediaPlayer(new Media(uriString));
-                mediaPlayer.play();
+                if(!isMute){
+                    mediaPlayer.play();
+                }
+
             }
         }
 
