@@ -35,8 +35,12 @@ public class MyModel extends Observable implements IModel {
         solvingServer.start();
     }
     public void refreshThreadPoolSize(){
-        generateServer.refreshThreadPoolSize();
-        solvingServer.refreshThreadPoolSize();
+        generateServer.stop();
+        solvingServer.stop();
+        generateServer=new Server(4000,1000,new ServerStrategyGenerateMaze());
+        solvingServer=new Server(4001,1000,new ServerStrategySolveSearchProblem());
+        generateServer.start();
+        solvingServer.start();
     }
     public void stop(){
         generateServer.stop();
