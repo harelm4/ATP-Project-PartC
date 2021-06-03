@@ -10,8 +10,8 @@
 
                   <AnchorPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-               <Button fx:id="vDownButton" layoutX="326.0" mnemonicParsing="false" onAction="#vDownClick" prefHeight="25.0" prefWidth="93.0" text="Volume down" AnchorPane.leftAnchor="320.0" AnchorPane.rightAnchor="190.0" AnchorPane.topAnchor="0.0" />
-               <Button fx:id="muteButton" layoutX="416.0" mnemonicParsing="false" onAction="#muteButton" prefHeight="25.0" prefWidth="49.0" text="Mute" AnchorPane.leftAnchor="405.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="0.0" />
+               <Button fx:id="vDownButton" layoutX="326.0" mnemonicParsing="false" onAction="#vDownClick" prefHeight="25.0" prefWidth="93.0" text="Volume down" AnchorPane.bottomAnchor="82.0" AnchorPane.topAnchor="0.0" />
+               <Button fx:id="muteButton" layoutX="416.0" mnemonicParsing="false" onAction="#muteButton" prefHeight="25.0" prefWidth="49.0" text="Mute" AnchorPane.bottomAnchor="82.0" AnchorPane.topAnchor="0.0" />
                         <Button fx:id="exitButton" layoutX="503.0" layoutY="1.0" mnemonicParsing="false" onAction="#exitButtonClick" prefHeight="25.0" prefWidth="35.0" text="Exit" AnchorPane.bottomAnchor="82.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                         <Button fx:id="helpButton" layoutX="161.0" mnemonicParsing="false" onAction="#helpButtonClick" prefHeight="25.0" prefWidth="41.0" text="Help" AnchorPane.bottomAnchor="82.0" AnchorPane.topAnchor="0.0" />
                         <Button fx:id="aboutButton" layoutX="110.0" mnemonicParsing="false" onAction="#aboutButtonClick" prefHeight="25.0" prefWidth="49.0" text="About" AnchorPane.bottomAnchor="82.0" AnchorPane.topAnchor="0.0" />
@@ -32,7 +32,7 @@
                             </Menu>
                           </menus>
                         </MenuBar>
-               <Button fx:id="vUpButton" layoutX="465.0" mnemonicParsing="false" onAction="#vUpClick" prefHeight="25.0" prefWidth="77.0" text="Volume up" AnchorPane.leftAnchor="465.0" AnchorPane.rightAnchor="58.0" AnchorPane.topAnchor="0.0" />
+               <Button fx:id="vUpButton" layoutX="465.0" mnemonicParsing="false" onAction="#vUpClick" prefHeight="25.0" prefWidth="77.0" text="Volume up" AnchorPane.bottomAnchor="82.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
 

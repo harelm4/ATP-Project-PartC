@@ -45,7 +45,6 @@ public class MyModel extends Observable implements IModel {
     public void stop(){
         generateServer.stop();
         solvingServer.stop();
-        System.out.println("stopped");
     }
     @Override
     public void generateMaze() {

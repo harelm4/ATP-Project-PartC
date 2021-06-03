@@ -52,6 +52,8 @@ public class MyViewController implements IView, Observer, Initializable {
     public MenuItem loadButton;
     public Button solButton;
     boolean wantMute=true;
+    boolean isMute=false;
+    boolean startedMute=false;
     public Button muteButton;
     public Button vUpButton;
     public Button vDownButton;
@@ -84,8 +86,12 @@ public class MyViewController implements IView, Observer, Initializable {
             mediaPlayer.pause();
         }
         mediaPlayer = new MediaPlayer(new Media(uriString));
+        mediaPlayer.setVolume(0.5);
+        if (!isMute){
+            mediaPlayer.play();
+            startedMute=true;
+        }
 
-        mediaPlayer.play();
         //focus on mazeDisplay
         mazeDisplayer.requestFocus();
         vUpButton.setDisable(false);
@@ -426,11 +432,17 @@ public class MyViewController implements IView, Observer, Initializable {
             mediaPlayer.setMute(true);
             wantMute=false;
             muteButton.setText("unMute");
+            isMute=true;
         }
         else {
             mediaPlayer.setMute(false);
             wantMute=true;
             muteButton.setText("Mute");
+            isMute=false;
+            mediaPlayer.setMute(false);
+            if(startedMute){
+                mediaPlayer.play();
+            }
 
         }
         mazeDisplayer.requestFocus();
