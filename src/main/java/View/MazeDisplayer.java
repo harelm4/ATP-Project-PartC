@@ -1,26 +1,24 @@
 package View;
 
-import Server.Configurations;
+
 import algorithms.mazeGenerators.Maze;
-import algorithms.mazeGenerators.MyMazeGenerator;
+
 import algorithms.mazeGenerators.Position;
 import algorithms.search.*;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Bounds;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
+
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
+
 
 
 import java.io.FileInputStream;
@@ -29,9 +27,9 @@ import java.util.ArrayList;
 
 public class MazeDisplayer extends Canvas implements IDisplayer {
     private StringProperty playerImage = new SimpleStringProperty();
-    ;
+
     private StringProperty wallImage = new SimpleStringProperty();
-    ;
+
     private Maze maze;
     private int playerRow;
     private int playerCol;
@@ -39,6 +37,47 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
     double cellHeight;
     double cellWidth;
     GraphicsContext graphicsContext;
+    private IControlPlusScroll controlPlusScrollStrategy;
+    private StringProperty leftFacePath=new SimpleStringProperty();
+    private StringProperty rightFacePath=new SimpleStringProperty();
+    private StringProperty upFacePath=new SimpleStringProperty();
+    private StringProperty downFacePath=new SimpleStringProperty();
+    private StringProperty solutionImagePath=new SimpleStringProperty();
+    private StringProperty winImagePath=new SimpleStringProperty();
+    private StringProperty startImagePath=new SimpleStringProperty();
+    private StringProperty endImagePath=new SimpleStringProperty();
+
+    public void setSolutionImagePath(String solutionImagePath) {
+        this.solutionImagePath.set(solutionImagePath);
+    }
+
+    public void setStartImagePath(String startImagePath) {
+        this.startImagePath.set(startImagePath);
+    }
+
+    public void setEndImagePath(String endImagePath) {
+        this.endImagePath.set(endImagePath);
+    }
+
+    public void setWinImagePath(String winImagePath) {
+        this.winImagePath.set(winImagePath);
+    }
+
+    public void setLeftFacePath(String leftFacePath) {
+        this.leftFacePath.set( leftFacePath);
+    }
+
+    public void setRightFacePath( String rightFacePath) {
+        this.rightFacePath.set(rightFacePath);
+    }
+
+    public void setUpFacePath(String upFacePath) {
+        this.upFacePath.set( upFacePath);
+    }
+
+    public void setDownFacePath(String downFacePath) {
+        this.downFacePath.set(downFacePath);
+    }
 
     public MazeDisplayer(){
         this.widthProperty().addListener(new ChangeListener<Number>() {
@@ -69,7 +108,8 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
 
     public void displayMaze(Maze maze) {
         this.maze = maze;
-
+        playerCol=maze.getStartPosition().getColumnIndex();
+        playerRow=maze.getStartPosition().getRowIndex();
         Display();
     }
 
@@ -90,21 +130,25 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
     }
 
     public void setPlayerPosition(int row, int col) {
+        if(maze==null){
+            System.out.println("create a maze");
+            return;
+        }
         //up
         if (row < playerRow) {
-            setPlayerImage("./resources/player_up.jpg");
+            setPlayerImage(upFacePath.get());
         }
         //down
         if (row > playerRow) {
-            setPlayerImage("./resources/player_front.jpg");
+            setPlayerImage(downFacePath.get());
         }
         //left
         if (col < playerCol) {
-            setPlayerImage("./resources/player_left.jpg");
+            setPlayerImage(leftFacePath.get());
         }
         //right
         if (col > playerCol) {
-            setPlayerImage("./resources/player_right.jpg");
+            setPlayerImage(rightFacePath.get());
         }
         playerRow = row;
         playerCol = col;
@@ -128,7 +172,7 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
         graphicsContext.clearRect(0, 0, canvasWidth, canvasHeight);
         Image winImage = null;
         try {
-            winImage = new Image(new FileInputStream("./resources/you win.jpg"));
+            winImage = new Image(new FileInputStream(winImagePath.get()));
         } catch (FileNotFoundException e) {
             System.out.println("There is no win image file");
         }
@@ -150,7 +194,9 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
     @Override
     public void Display() {
         if (maze != null) {
-            double canvasHeight = getHeight()-20;
+
+
+            double canvasHeight = getHeight();
             double canvasWidth = getWidth();
             int rowSize = maze.getRowSize();
             int colsSize = maze.getColSize();
@@ -229,26 +275,14 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
             }
         }
     }
-    public void zoom(double factor, double x, double y) {
-        // determine scale
-        Timeline timeline=new Timeline();
-        double oldScale = getScaleX();
-        double scale = oldScale * factor;
-        double f = (scale / oldScale) - 1;
-        // determine offset that we will have to move the node
-        Bounds bounds = localToScene(getBoundsInLocal());
-        double dx = (x - (bounds.getWidth() / 2 + bounds.getMinX()));
-        double dy = (y - (bounds.getHeight() / 2 + bounds.getMinY()));
-        // timeline that scales and moves the node
+    public void controlPlusScrollHandle(ScrollEvent scrollEvent) {
+        try{
+            controlPlusScrollStrategy.Activate(scrollEvent,this);
+        }
+        catch (NullPointerException e){
+            System.out.println("please set controlPlusScroll strategy");
+        }
 
-        timeline.getKeyFrames().clear();
-        timeline.getKeyFrames().addAll(
-                new KeyFrame(Duration.millis(200), new KeyValue(translateXProperty(), getTranslateX() - f * dx)),
-                new KeyFrame(Duration.millis(200), new KeyValue(translateYProperty(), getTranslateY() - f * dy)),
-                new KeyFrame(Duration.millis(200), new KeyValue(scaleXProperty(), scale)),
-                new KeyFrame(Duration.millis(200), new KeyValue(scaleYProperty(), scale))
-        );
-        timeline.play();
     }
 
 
@@ -261,7 +295,7 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
         //start
         Image startFlag = null;
         try {
-            startFlag = new Image(new FileInputStream("./resources/start_flag.jpg"));
+            startFlag = new Image(new FileInputStream(startImagePath.get()));
         } catch (FileNotFoundException e) {
             System.out.println("There is no start image file");
         }
@@ -276,7 +310,7 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
         //goal
         Image goal = null;
         try {
-            goal = new Image(new FileInputStream("./resources/pizza.jpg"));
+            goal = new Image(new FileInputStream(endImagePath.get()));
         } catch (FileNotFoundException e) {
             System.out.println("There is no goal image file");
         }
@@ -356,4 +390,11 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
     public double prefHeight(double v) {
         return this.getHeight();
     }
+
+
+    public void setControlPlusScrollStrategy(ZoomOnMaze zoomOnMaze) {
+        controlPlusScrollStrategy=zoomOnMaze;
+    }
 }
+
+

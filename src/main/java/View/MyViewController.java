@@ -66,23 +66,47 @@ public class MyViewController implements IView, Observer, Initializable {
         Configurator.setRootLevel(Level.ALL);
         mazeDisplayer.heightProperty().bind(mPane.heightProperty());
         mazeDisplayer.widthProperty().bind(mPane.widthProperty());
+        //disable buttons
         newButton.setDisable(true);
         saveButton.setDisable(true);
         solButton.setDisable(true);
         vUpButton.setDisable(true);
         vDownButton.setDisable(true);
         muteButton.setDisable(true);
+        //set initial image
+        mazeDisplayer.setPlayerImage("./resources/player_front.jpg");
+        //set player face images
+        mazeDisplayer.setDownFacePath("./resources/player_front.jpg");
+        mazeDisplayer.setUpFacePath("./resources/player_up.jpg");
+        mazeDisplayer.setLeftFacePath("./resources/player_left.jpg");
+        mazeDisplayer.setRightFacePath("./resources/player_right.jpg");
+        //set solution image
+        mazeDisplayer.setSolutionImagePath("./resources/path.jpg");
+        //set Win image
+        mazeDisplayer.setWinImagePath("./resources/you win.jpg");
+        //set wall image
+        mazeDisplayer.setWallImage("./resources/wall.jpg");
+        //set start image
+        mazeDisplayer.setStartImagePath("./resources/start_flag.jpg");
+        //set end image
+        mazeDisplayer.setEndImagePath("./resources/pizza.jpg");
+        //set control plus scroll strategy
+        mazeDisplayer.setControlPlusScrollStrategy(new ZoomOnMaze());
+
 
     }
+
 
     public void newButtonClick(ActionEvent actionEvent) {
 
 
         viewModel.generateMaze();
         setMaze();
+
         //unlock keys
         isEnded=false;
         saveButton.setDisable(false);
+        solButton.setDisable(false);
         //music set
         String uriString = new File("./resources/music.mp3").toURI().toString();
         if(mediaPlayer!=null){
@@ -198,9 +222,6 @@ public class MyViewController implements IView, Observer, Initializable {
     dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
 
 
-//       dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-//todo: add icon here
-
 
  // Create labels and fields.
      GridPane grid = new GridPane();
@@ -289,7 +310,7 @@ public class MyViewController implements IView, Observer, Initializable {
         Configurations.getInstance().setMazeGeneratingAlgorithm(generatorType);
         Configurations.getInstance().setMazeSearchingAlgorithm(algorithmType);
         newButton.setDisable(false);
-        solButton.setDisable(false);
+
 
         viewModel.refreshThreadPoolSize();
     }
@@ -300,8 +321,7 @@ public class MyViewController implements IView, Observer, Initializable {
 
    }
    private void setMaze(){
-       mazeDisplayer.setPlayerImage("./resources/player_front.jpg");
-       mazeDisplayer.setWallImage("./resources/wall.jpg");
+
        mazeDisplayer.setPlayerPosition(playerRow,playerCol);
        mazeDisplayer.displayMaze(maze);
 
@@ -328,20 +348,24 @@ public class MyViewController implements IView, Observer, Initializable {
 
             keyEvent.consume();
             //lock keys in case of win
-            if (playerRow==maze.getGoalPosition().getRowIndex()&&playerCol==maze.getGoalPosition().getColumnIndex()){
-                isEnded=true;
-                mediaPlayer.pause();
-                String uriString = new File("./resources/winMusic.mp3").toURI().toString();
-                mediaPlayer = new MediaPlayer(new Media(uriString));
-                if(!isMute){
-                    mediaPlayer.play();
-                }
-
+            playerWonHandle();
             }
         }
 
+    private void playerWonHandle() {
+        if (playerRow==maze.getGoalPosition().getRowIndex()&&playerCol==maze.getGoalPosition().getColumnIndex()){
+            isEnded=true;
+            mediaPlayer.pause();
+            String uriString = new File("./resources/winMusic.mp3").toURI().toString();
+            mediaPlayer = new MediaPlayer(new Media(uriString));
+            if(!isMute){
+                mediaPlayer.play();
+            }
 
-    }
+        }
+
+
+}
 
     public void mouseClicked(MouseEvent mouseEvent) {
 
@@ -405,35 +429,14 @@ public class MyViewController implements IView, Observer, Initializable {
     }
     public void setViewModel(ViewModel vm){
         viewModel=vm;
+        vm.addObserver(this);
     }
 
 
     public void Zoom(ScrollEvent scrollEvent) {
-        double m_zoom;
-        if (scrollEvent.isControlDown()) {
-            m_zoom = 1.5;
-            if (scrollEvent.getDeltaY() > 0) {
-                m_zoom = 1.1*m_zoom;
-
-            } else if (scrollEvent.getDeltaY() < 0) {
-                m_zoom = 1.1/ m_zoom;
-            }
-            if (mazeDisplayer.getScaleX() * m_zoom <0.9)
-            {
-                mazeDisplayer.setScaleX(1);
-                mazeDisplayer.setScaleY(1);
-                mazeDisplayer.setTranslateX(0);
-                mazeDisplayer.setTranslateY(0);
-            }
-            else
-            {
-                mazeDisplayer.zoom(m_zoom, scrollEvent.getSceneX(), scrollEvent.getSceneY());
-                mazeDisplayer.setScaleX(mazeDisplayer.getScaleX() * m_zoom);
-                mazeDisplayer.setScaleY(mazeDisplayer.getScaleY() * m_zoom);
-            }
-            scrollEvent.consume();     // event handling from the root
-            mazeDisplayer.requestFocus();
-        }
+        mazeDisplayer.controlPlusScrollHandle(scrollEvent);
+        scrollEvent.consume();     // event handling from the root
+        mazeDisplayer.requestFocus();
     }
 
     public void vUpClick(ActionEvent actionEvent) {
@@ -459,6 +462,7 @@ public class MyViewController implements IView, Observer, Initializable {
             }
 
         }
+
         mazeDisplayer.requestFocus();
 
     }
@@ -469,18 +473,24 @@ public class MyViewController implements IView, Observer, Initializable {
     }
 
     public void MoveWithDrag(MouseEvent mouseEvent) {
-
-        int mouseX = (int)(mouseEvent.getSceneX()/mazeDisplayer.cellWidth);
-        int mouseY = (int)((mouseEvent.getSceneY()-30)/mazeDisplayer.cellHeight);
-
-        if(playerCol==mouseX && playerRow==mouseY){
-            isCellOfPlayer=true;
+        if (maze==null){
+            System.out.println("please create maze");
+            return;
         }
-        if(isCellOfPlayer){
-            viewModel.movePlayerDrag(mouseX,mouseY);
+        if(!isEnded){
+            int mouseX = (int)(mouseEvent.getSceneX()/mazeDisplayer.cellWidth);
+            int mouseY = (int)((mouseEvent.getSceneY()-30)/mazeDisplayer.cellHeight);
+
+            if(playerCol==mouseX && playerRow==mouseY){
+                isCellOfPlayer=true;
+            }
+            if(isCellOfPlayer){
+                viewModel.movePlayerDrag(mouseX,mouseY);
+                mazeDisplayer.setPlayerPosition(playerRow, playerCol);
+            }
+            playerWonHandle();
         }
-        System.out.println("("+ playerCol+","+playerRow +")");
-        System.out.println("mouse clic----k("+ mouseX+","+mouseY +")");
+
 
     }
 

@@ -16,6 +16,6 @@
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.14.1" level="project" />
     <orderEntry type="library" name="ATPProjectJAR" level="project" />
     <orderEntry type="library" name="lib" level="project" />
-    <orderEntry type="library" name="lib1" level="project" />
+    <orderEntry type="library" name="ATProjectJAR" level="project" />
   </component>
 </module>

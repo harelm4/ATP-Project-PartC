@@ -24,6 +24,9 @@ public class ViewModel extends Observable implements Observer {
         this.model.assignObserver(this);
         this.maze = null;
     }
+    public void setModel(IModel model){
+        this.model=model;
+    }
 
 
     public Maze getMaze() {
@@ -135,10 +138,7 @@ public class ViewModel extends Observable implements Observer {
             case Z:
                 direction="left-down";
                 break;
-            case CONTROL:
-                direction="control";
 
-                break;
 
         }
 

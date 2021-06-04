@@ -21,8 +21,6 @@ public class MyModel extends Observable implements IModel {
     private Solution sol;
     private int playerRow;
     private int playerCol;
-    private IMazeGenerator mazeGenerator;
-    ISearchingAlgorithm solvingAlgorithm;
     private int colSize;
     private int rowSize;
     private Server generateServer;
@@ -95,6 +93,10 @@ public class MyModel extends Observable implements IModel {
 
     @Override
     public void updateCharacterLocation(String direction) {
+        if(maze==null){
+            System.out.println("please create maze");
+            return;
+        }
         int prevCol=playerCol;
         int prevRow=playerRow;
         switch (direction){
@@ -134,9 +136,6 @@ public class MyModel extends Observable implements IModel {
             case "left-down":
                 playerCol -= 1;
                 playerRow++;
-                break;
-            case "control":
-
                 break;
         }
 
