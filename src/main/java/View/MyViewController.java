@@ -59,6 +59,7 @@ public class MyViewController implements IView, Observer, Initializable {
     public Button vUpButton;
     public Button vDownButton;
     public Boolean isCellOfPlayer=false;
+    double volumeLevel=0.5;
 
     Logger logger = LogManager.getLogger(Logger.class);
     @Override
@@ -113,7 +114,7 @@ public class MyViewController implements IView, Observer, Initializable {
             mediaPlayer.pause();
         }
         mediaPlayer = new MediaPlayer(new Media(uriString));
-        mediaPlayer.setVolume(0.5);
+        mediaPlayer.setVolume(volumeLevel);
         if (!isMute){
             mediaPlayer.play();
             startedMute=true;
@@ -186,6 +187,28 @@ public class MyViewController implements IView, Observer, Initializable {
             e.printStackTrace();
         }
         setMaze();
+        //set all buttons
+        isEnded=false;
+        saveButton.setDisable(false);
+        solButton.setDisable(false);
+        String uriString = new File("./resources/music.mp3").toURI().toString();
+        if(mediaPlayer!=null){
+            mediaPlayer.pause();
+        }
+        mediaPlayer = new MediaPlayer(new Media(uriString));
+        mediaPlayer.setVolume(volumeLevel);
+        if (!isMute){
+            mediaPlayer.play();
+            startedMute=true;
+        }
+
+        //focus on mazeDisplay
+        mazeDisplayer.requestFocus();
+
+        vUpButton.setDisable(false);
+        vDownButton.setDisable(false);
+        muteButton.setDisable(false);
+
     }
 
 
@@ -359,6 +382,7 @@ public class MyViewController implements IView, Observer, Initializable {
             String uriString = new File("./resources/winMusic.mp3").toURI().toString();
             mediaPlayer = new MediaPlayer(new Media(uriString));
             if(!isMute){
+                mediaPlayer.setVolume(volumeLevel);
                 mediaPlayer.play();
             }
 
@@ -440,7 +464,8 @@ public class MyViewController implements IView, Observer, Initializable {
     }
 
     public void vUpClick(ActionEvent actionEvent) {
-        mediaPlayer.volumeProperty().set(mediaPlayer.getVolume()+0.1);
+        volumeLevel+=0.1;
+        mediaPlayer.volumeProperty().set(volumeLevel);
         mazeDisplayer.requestFocus();
     }
 
@@ -468,7 +493,8 @@ public class MyViewController implements IView, Observer, Initializable {
     }
 
     public void vDownClick(ActionEvent actionEvent) {
-        mediaPlayer.volumeProperty().set(mediaPlayer.getVolume()-0.1);
+        volumeLevel-=0.1;
+        mediaPlayer.volumeProperty().set(volumeLevel);
         mazeDisplayer.requestFocus();
     }
 
