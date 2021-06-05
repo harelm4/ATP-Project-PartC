@@ -196,7 +196,7 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
         if (maze != null) {
 
 
-            double canvasHeight = getHeight();
+            double canvasHeight = getHeight()-25;
             double canvasWidth = getWidth();
             int rowSize = maze.getRowSize();
             int colsSize = maze.getColSize();
