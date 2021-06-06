@@ -23,6 +23,7 @@ public class ZoomOnMaze implements IControlPlusScroll {
 
             } else if (scrollEvent.getDeltaY() < 0) {
                 zoomConstant *= 0.5;
+
                 mazeDisplayer.setScaleX(zoomConstant);
                 mazeDisplayer.setScaleY(zoomConstant);
             }
@@ -33,7 +34,6 @@ public class ZoomOnMaze implements IControlPlusScroll {
 
             }
 
-//            mazeDisplayer.setTranslateY(25);
 
 
 

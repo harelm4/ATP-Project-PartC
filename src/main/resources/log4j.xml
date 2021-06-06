@@ -7,19 +7,19 @@
         <Property name="ServerLogs">./logs/server.log</Property>
     </Properties>
     <Appenders>
-<!--        <Console name="Console" target="SYSTEM_OUT">-->
-<!--            <PatternLayout pattern="%d{yyyy.MM.dd HH:mm:ss.SSS} %-5level %logger - %msg%"/>-->
-<!--        </Console>-->
-<!--        <RollingFile name="File" fileName="${filename}" filePattern="${filename}-%d{yyyy.MM.dd_HH.mm.ss}-%i.log">-->
-<!--            <PatternLayout pattern="%d{yyyy.MM.dd HH:mm:ss.SSS} %-5level %logger - %msg%n"/>-->
-<!--            <SizeBasedTriggeringPolicy size="1 MB"/>-->
-<!--        </RollingFile>-->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy.MM.dd HH:mm:ss.SSS} %-5level %logger - %msg%n"/>
+        </Console>
+        <RollingFile name="File" fileName="./log/Logs" filePattern="${filename}-%d{yyyy.MM.dd_HH.mm.ss}-%i.log">
+            <PatternLayout pattern="%d{yyyy.MM.dd HH:mm:ss.SSS} %-5level %logger - %msg%n"/>
+            <SizeBasedTriggeringPolicy size="1 MB"/>
+        </RollingFile>
+
     </Appenders>
     <Loggers>
 
 
         <Root>
-            <priority value ="debug"></priority>
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
         </Root>

@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class main extends Application {
     IModel model;
@@ -19,6 +20,7 @@ public class main extends Application {
         primaryStage.setScene(new Scene(root, 600, 600));
         primaryStage.show();
         primaryStage.setResizable(true);
+
 
 
         model = new MyModel();

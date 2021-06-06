@@ -42,10 +42,13 @@
 
 
       </AnchorPane>
-       <AnchorPane fx:id="mazePane" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
-           <children>
-               <MazeDisplayer fx:id="mazeDisplayer" onKeyPressed="#keyPressed" onScroll="#Zoom" onMouseDragged="#MoveWithDrag" onMouseReleased="#realisedMouse" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-           </children>
-       </AnchorPane>
+       <ScrollPane fx:id="mazePane" prefHeight="575" prefWidth="600" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+
+
+
+               <MazeDisplayer fx:id="mazeDisplayer" onKeyPressed="#keyPressed"  onScroll="#Zoom" onMouseDragged="#MoveWithDrag" height="575" width="600" onMouseReleased="#realisedMouse" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+
+       </ScrollPane>
    </children>
 </AnchorPane>
