@@ -92,6 +92,10 @@ public class ViewModel extends Observable implements Observer {
         this.model.generateMaze();
     }
 
+    /**
+     * Depending on the event that came from the keyEvent we will change the direction and send it to the model to change the position of the player
+     * @param keyEvent The key event
+     */
     public void moveCharacter(KeyEvent keyEvent)
     {
         String direction = "";

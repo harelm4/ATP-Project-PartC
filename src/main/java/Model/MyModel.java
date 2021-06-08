@@ -6,6 +6,7 @@ import Server.Configurations;
 import Server.*;
 import algorithms.mazeGenerators.*;
 import algorithms.search.*;
+import javafx.scene.control.Alert;
 import javafx.scene.media.Media;
 
 
@@ -32,6 +33,10 @@ public class MyModel extends Observable implements IModel {
         generateServer.start();
         solvingServer.start();
     }
+
+    /**
+     *When we update the thread pool size in properties we will stop the server and run again with the new size
+     */
     public void refreshThreadPoolSize(){
         generateServer.stop();
         solvingServer.stop();
@@ -44,6 +49,10 @@ public class MyModel extends Observable implements IModel {
         generateServer.stop();
         solvingServer.stop();
     }
+
+    /**
+     * Create a new client for a new maze
+     */
     @Override
     public void generateMaze() {
 
@@ -79,11 +88,10 @@ public class MyModel extends Observable implements IModel {
         setChanged();
         notifyObservers();
         playerCol=maze.getStartPosition().getColumnIndex();
-        setChanged();
-        notifyObservers();
         playerRow=maze.getStartPosition().getRowIndex();
         setChanged();
         notifyObservers();
+
     }
 
     @Override
@@ -91,10 +99,15 @@ public class MyModel extends Observable implements IModel {
         return maze;
     }
 
+    /**
+     * Update player position
+     * @param direction a string that provides the movement of the player
+     */
     @Override
     public void updateCharacterLocation(String direction) {
         if(maze==null){
-            System.out.println("please create maze");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("You are trying to move the player but the maze is null\nplease create a maze to enable this action");
             return;
         }
         int prevCol=playerCol;
@@ -164,6 +177,9 @@ public class MyModel extends Observable implements IModel {
         this.addObserver(o);
     }
 
+    /**
+     * Create a new client for solving the maze
+     */
     @Override
     public void solveMaze() {
         try {

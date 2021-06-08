@@ -9,11 +9,17 @@
 .button{
     -fx-background-color: #ffffff;
 }
+.button:pressed{
+    -fx-text-background-color: gray;
+}
 .menu-bar{
     -fx-background-color: #ffffff ;
 }
 .menu-button{
     -fx-background-color: #ffffff ;
+}
+.menu-button:pressed{
+    -fx-text-background-color: gray;
 }
 .menu:hover{
     -fx-text-background-color: black;

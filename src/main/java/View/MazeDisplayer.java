@@ -14,11 +14,12 @@ import javafx.beans.value.ObservableValue;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
-
+import org.apache.logging.log4j.core.appender.nosql.DefaultNoSqlObject;
 
 
 import java.io.FileInputStream;
@@ -46,10 +47,12 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
     private StringProperty winImagePath=new SimpleStringProperty();
     private StringProperty startImagePath=new SimpleStringProperty();
     private StringProperty endImagePath=new SimpleStringProperty();
+    private StringProperty roadImage=new SimpleStringProperty();
 
     public void setSolutionImagePath(String solutionImagePath) {
         this.solutionImagePath.set(solutionImagePath);
     }
+
 
     public void setStartImagePath(String startImagePath) {
         this.startImagePath.set(startImagePath);
@@ -79,6 +82,13 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
         this.downFacePath.set(downFacePath);
     }
 
+    public Maze getMaze() {
+        return maze;
+    }
+
+    /**
+     * Drawing the maze / picture of win when you reach the goal
+     */
     public MazeDisplayer(){
         this.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -129,9 +139,14 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
         this.wallImage.set(wallImage);
     }
 
+    /**
+     * At each movement of the player a set is made to the corresponding image respectively
+     */
     public void setPlayerPosition(int row, int col) {
         if(maze==null){
-            System.out.println("create a maze");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("You are trying to move the player but the maze is null\nplease create a maze to enable this action");
+            alert.showAndWait();
             return;
         }
         //up
@@ -162,6 +177,9 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
         }
     }
 
+    /**
+     * That the player has reached the goal a suitable image will be displayed
+     */
     private void drawWin() {
         double canvasHeight = getHeight();
         double canvasWidth = getWidth();
@@ -191,6 +209,13 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
         return playerCol;
     }
 
+    public void setMaze(Maze maze) {
+        this.maze = maze;
+    }
+
+    /**
+     * Drawing the maze
+     */
     @Override
     public void Display() {
         if (maze != null) {
@@ -208,14 +233,15 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
             //clear the canvas:
             graphicsContext.clearRect(0, 0, canvasWidth, canvasHeight);
             long t = System.currentTimeMillis();
+            DrawRoad(graphicsContext, cellHeight, cellWidth);
+            drawStartGoal(graphicsContext, cellHeight, cellWidth);
 
-            drawStartGoal(graphicsContext, cellHeight, cellWidth, rowSize, colsSize);
 
-
-            DrawWalls(graphicsContext, cellHeight, cellWidth, rowSize, colsSize);
+            DrawWalls(graphicsContext, cellHeight, cellWidth);
 
 
             DrawPlayer(graphicsContext, cellHeight, cellWidth);
+
 
 
 
@@ -223,7 +249,53 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
 
 
     }
+    public String getRoadImagePath() {
+        return roadImage.get();
+    }
 
+
+    public void setRoadImage(String roadImage) {
+        this.roadImage.set(roadImage);
+    }
+
+
+    /**
+     * Draw the cells in the maze that the player can go through
+     * @param graphicsContext the canvas of the maze
+     * @param cellHeight cell height
+     * @param cellWidth cellWidth
+     */
+    private void DrawRoad(GraphicsContext graphicsContext, double cellHeight, double cellWidth) {
+        Image roadImage = null;
+        try {
+            roadImage = new Image(new FileInputStream(getRoadImagePath()));
+        } catch (FileNotFoundException e) {
+            System.out.println("There is no road image file");
+
+        }
+        graphicsContext.setFill(Color.GREEN);
+        for (int i = 0; i < maze.getRowSize(); i++) {
+            for (int j = 0; j < maze.getColSize(); j++) {
+                double x = j * cellWidth;
+                double y = i * cellHeight;
+                if (!maze.isPositionAWall(new Position(i, j))) {
+                    if (roadImage == null)
+                        //draw green rectangle in this road space
+                        graphicsContext.fillRect(x, y, cellWidth, cellHeight);
+                    else
+                        //draw image in this road space
+                        graphicsContext.drawImage(roadImage, x, y, cellWidth, cellHeight);
+                } else if (!(maze.getStartPosition().equals(new Position(i, j))) && !maze.getGoalPosition().equals(new Position(i, j))) {
+                    Image c = null;
+                    graphicsContext.drawImage(c, x, y, cellWidth, cellHeight);
+                }
+            }
+        }
+    }
+
+    /**
+     * Drawing the actor in the maze
+     */
     private void DrawPlayer(GraphicsContext graphicsContext, double cellHeight, double cellWidth) {
 
         double x = playerCol * cellWidth;
@@ -243,7 +315,10 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
     }
 
 
-    private void DrawWalls(GraphicsContext graphicsContext, double cellHeight, double cellWidth, int rows, int cols) {
+    /**
+     * Painting the walls in a maze
+     */
+    private void DrawWalls(GraphicsContext graphicsContext, double cellHeight, double cellWidth) {
         Image wallImage = null;
         try {
             wallImage = new Image(new FileInputStream(getWallImagePath()));
@@ -263,20 +338,13 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
                     else
                         //draw image in this wall space
                         graphicsContext.drawImage(wallImage, x, y, cellWidth, cellHeight);
-                } else if (!(maze.getStartPosition().equals(new Position(i, j))) && !maze.getGoalPosition().equals(new Position(i, j))) {
-                    Image c = null;
-//                    try {
-//                        c = new Image(new FileInputStream("./resources/road2.jpg"));
-//                    } catch (FileNotFoundException e) {
-//                        System.out.println("no road image");
-//                    }
-                    graphicsContext.drawImage(c, x, y, cellWidth, cellHeight);
                 }
             }
         }
     }
     public void controlPlusScrollHandle(ScrollEvent scrollEvent) {
         try{
+
             controlPlusScrollStrategy.Activate(scrollEvent,this);
         }
         catch (NullPointerException e){
@@ -287,7 +355,7 @@ public class MazeDisplayer extends Canvas implements IDisplayer {
 
 
 
-    private void drawStartGoal(GraphicsContext graphicsContext, double cellHeight, double cellWidth, int rows, int cols) {
+    private void drawStartGoal(GraphicsContext graphicsContext, double cellHeight, double cellWidth) {
         double x = maze.getStartPosition().getColumnIndex() * cellWidth;
         double y = maze.getStartPosition().getRowIndex() * cellHeight;
 
