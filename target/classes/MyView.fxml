@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import View.MazeDisplayer?>
+
+<AnchorPane fx:id="mPane" prefHeight="600" prefWidth="600" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
+   <children>
+      <AnchorPane  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#mouseClicked" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+                  <AnchorPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+               <Button fx:id="vDownButton" layoutX="302.0" stylesheets="myCss.css" layoutY="1.0" mnemonicParsing="false" onAction="#vDownClick" prefHeight="25.0" prefWidth="101.0" text="Volume down" AnchorPane.bottomAnchor="81.0" AnchorPane.topAnchor="1.0" />
+               <Button fx:id="muteButton" layoutX="404.0" stylesheets="myCss.css" mnemonicParsing="false" onAction="#muteButton" prefHeight="25.0" prefWidth="61.0" text="Mute" AnchorPane.bottomAnchor="82.0" AnchorPane.topAnchor="0.0" />
+                        <Button fx:id="exitButton" stylesheets="myCss.css"  styleClass="button_exit" layoutX="503.0" layoutY="1.0" mnemonicParsing="false" onAction="#exitButtonClick" prefHeight="25.0" prefWidth="35.0" text="Exit" AnchorPane.bottomAnchor="82.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <Button fx:id="helpButton" stylesheets="myCss.css" layoutX="161.0" mnemonicParsing="false" onAction="#helpButtonClick" prefHeight="25.0" prefWidth="41.0" text="Help" AnchorPane.bottomAnchor="82.0" AnchorPane.topAnchor="0.0" />
+                        <Button fx:id="aboutButton" stylesheets="myCss.css" layoutX="110.0" mnemonicParsing="false" onAction="#aboutButtonClick" prefHeight="25.0" prefWidth="49.0" text="About" AnchorPane.bottomAnchor="82.0" AnchorPane.topAnchor="0.0" />
+                        <Button fx:id="solButton" stylesheets="myCss.css" layoutX="202.0" mnemonicParsing="false" onAction="#showSolution" prefHeight="25.0" prefWidth="93.0" text="Show Solution" AnchorPane.bottomAnchor="82.0" AnchorPane.topAnchor="0.0" />
+                        <MenuBar fx:id="menuBox" stylesheets="myCss.css" layoutY="1.0" prefHeight="25.0" prefWidth="110.0" AnchorPane.bottomAnchor="81.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="1.0">
+                          <menus >
+                            <Menu fx:id="file_button" styleClass="menu" mnemonicParsing="false" text="File">
+                              <items>
+                                <MenuItem fx:id="newButton" mnemonicParsing="false" onAction="#newButtonClick" text="New" />
+                                    <MenuItem fx:id="saveButton" mnemonicParsing="false" onAction="#saveButtonClick" text="Save" />
+                                    <MenuItem fx:id="loadButton" mnemonicParsing="false" onAction="#loadButtonClick" text="Load" />
+                              </items>
+                            </Menu>
+                            <Menu fx:id="optionsButton" styleClass="menu" mnemonicParsing="false" text="Options">
+                              <items>
+                                <MenuItem fx:id="propButton" mnemonicParsing="false" onAction="#propOnClick" text="Properties" />
+                              </items>
+                            </Menu>
+                          </menus>
+                        </MenuBar>
+               <Button fx:id="vUpButton" stylesheets="myCss.css" layoutX="465.0" mnemonicParsing="false" onAction="#vUpClick" prefHeight="25.0" prefWidth="77.0" text="Volume up" AnchorPane.bottomAnchor="82.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+
+
+
+
+
+
+      </AnchorPane>
+       <ScrollPane fx:id="mazePane" prefHeight="575" prefWidth="600" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+
+
+
+               <MazeDisplayer fx:id="mazeDisplayer" onKeyPressed="#keyPressed"  onScroll="#Zoom" onMouseDragged="#MoveWithDrag" height="575" width="600" onMouseReleased="#initStartPoint" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+
+       </ScrollPane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,35 @@
+.button:disabled{
+    -fx-background-color: #ffffff;
+    -fx-text-background-color: gray;
+}
+.button:hover{
+
+    -fx-background-color: #ffe4a4;
+}
+.button{
+    -fx-background-color: #ffffff;
+}
+.button:pressed{
+    -fx-text-background-color: gray;
+}
+.menu-bar{
+    -fx-background-color: #ffffff ;
+}
+.menu-button{
+    -fx-background-color: #ffffff ;
+}
+.menu-button:pressed{
+    -fx-text-background-color: gray;
+}
+.menu:hover{
+    -fx-text-background-color: black;
+    -fx-background-color: #a4b8ff;
+
+}
+.menu:showing{
+    -fx-text-background-color: black;
+    -fx-background-color: #a4b8ff;
+}
+.button_exit:hover{
+    -fx-background-color: #ffa4a4;
+}
